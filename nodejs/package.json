@@ -1,0 +1,70 @@
+{
+  "name": "mailboxapi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_ENV=development NODE_PATH=./ nodemon Infra/api/server.js",
+    "debug": "NODE_ENV=development NODE_PATH=./ nodemon --inspect Infra/api/server.js",
+    "test": "TZ=utc NODE_ENV=test NODE_PATH=./ mocha \"Domain/**/*.test.js\" \"Infra/**/*.test.js\" --colors --require Tests/support.js --reporter spec",
+    "test:watch": "yarn test -- --watch --reporter min",
+    "integration:app": "TZ=utc NODE_ENV=test NODE_PATH=./ cucumberjs",
+    "integration": "yarn integration:app -- Features",
+    "integration:coverage": "nyc --branches 60 --functions 60 --lines 60 --statements 60 --exclude \"(node_modules|Infra|Fixtures|Features)/**/*\" --exclude \"**/Exception/*.js\" --report-dir integration-coverage --all --exclude \"Domain/**/*.test.js\" --include \"Domain/UseCases/**/*.js\" yarn integration",
+    "integration:watch": "watch -p \"+(Domain|Infra|seeders|Features)/**/*.js\" -c \"yarn integration\"",
+    "coverage": "nyc yarn test",
+    "coverage:watch": "watch -p \"+(Domain|Infra|seeders|Features)/**/*.js\" -c \"nyc yarn test\"",
+    "lint": "standard -v \"Domain/**/*.js\" \"Infra/**/*.js\" \"seeders/*.js\" \"Features/**/*.js\"",
+    "lint:fix": "standard --fix \"Domain/**/*.js\" \"Infra/**/*.js\" \"seeders/*.js\" \"Features/**/*.js\"",
+    "lint:watch": "watch -p \"+(Domain|Infra|seeders|Features)/**/*.js\" -c \"yarn lint\"",
+    "migration:create": "sequelize migration:create --name",
+    "db:migrate": "sequelize db:migrate",
+    "db:migrate:undo": "sequelize db:migrate:undo",
+    "db:migrate:undo:all": "sequelize db:migrate:undo:all",
+    "seed:create": "sequelize seed:create --name",
+    "db:seed": "sequelize db:seed",
+    "db:seed:all": "sequelize db:seed:all",
+    "db:seed:undo": "sequelize db:seed:undo",
+    "db:seed:undo:all": "sequelize db:seed:undo:all",
+    "build": "yarn lint && yarn coverage && yarn integration:coverage"
+  },
+  "engines": {
+    "node": "7.9.0",
+    "npm": "3.10.8"
+  },
+  "nyc": {
+    "statements": 95,
+    "branches": 90,
+    "functions": 95,
+    "lines": 90,
+    "check-coverage": true,
+    "reporter": [
+      "lcov",
+      "text",
+      "text-summary"
+    ],
+    "exclude": [
+      "node_modules/**/*",
+      "Domain/**/*.test.js",
+      "Infra/**/*.test.js",
+      "Infra/**/*.type.js",
+      "Features/**/*.js",
+      "Fixtures/**/*.js",
+      "TODO It will be removed when we have the generic mapper",
+      "**/*/BaseMap.js",
+      "Tests/**/*"
+    ]
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "context",
+      "it",
+      "after",
+      "afterEach",
+      "before",
+      "beforeEach"
+    ]
+  },
+  "author": "",
+  "license": "ISC"
+}
