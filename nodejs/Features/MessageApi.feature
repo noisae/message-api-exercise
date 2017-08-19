@@ -7,7 +7,6 @@ Feature: Message Api
     Given I have Messages
     When I Retrieve a paginateable list of Messages
     Then I receive a paginateable list of Messages
-     And I can see if Messages was read already
 
   Scenario: List Archived Messages
     Given I have Archived Messages
@@ -18,8 +17,6 @@ Feature: Message Api
     Given I have a one Message
     When I Retrieve a one Message
     Then I receive Message
-     And I can see if Message was read already
-     And I can see if Message was achieved already
 
   Scenario: Read Message
     Given I have a one Message

@@ -2,25 +2,45 @@ const { defineSupportCode } = require('cucumber')
 const { expect } = require('chai')
 
 const MessageFixture = require("Fixtures/Message.fixture")
-const MessageAgregate = require("Domain/Message/Aggregate")
-const MessageRepository = require("Infra/Repository/Message")
+const MessageApiService = require("Domain/Message/ApiService")
+const MessageRepository = require("Infra/Repository/Message")()
 
 defineSupportCode(({ Given, When, Then }) => {
-  Given(/^I have Messages$/, function () {
-    const MessageRepositoryStub = this.World.stubDependency(MessageRepository)
+  Given(/^I have (.*)\s?Messages$/, function (archived) {
+    const MessageRepositoryMock = this.World.mockDependency(MessageRepository)
 
-    this.World.Messages = MessageFixture.buildList()
-    MessageRepositoryStub.resolves(this.World.Messages)
+    this.World.Constants.Messages = MessageFixture.buildList(1)
+    this.World.Constants.page = 2
+    this.World.Constants.limit = 1
 
-    this.World.Expects = { MessageRepositoryStub }
+    let method = 'list'
+    if (archived) {
+      method = 'listArchived'
+    }
+
+    MessageRepositoryMock
+      .expects(method)
+      .withArgs(this.World.Constants.page, this.World.Constants.limit)
+      .resolves(this.World.Constants.Messages)
+
+    this.World.Expects = { MessageRepositoryMock }
+    this.World.Boundaries = { MessageRepository }
   })
-  When('I Retrieve a paginateable list of Messages', function (callback) {
-    this.World.Result = MessageAgregate.list()
+  When(/^I Retrieve a paginateable list of (.*)\s?Messages$/, async function (archived) {
+    const page = this.World.Constants.page
+    const limit = this.World.Constants.limit
+    if(archived) {
+      this.World.Result = await MessageApiService.list({ page, limit }, this.World.Boundaries)
+    } else {
+      this.World.Result = await MessageApiService.listArchived({ page, limit }, this.World.Boundaries)
+    }
   })
-  Then('I receive a paginateable list of Messages', function (callback) {
-    const { Result, Expects: { MessageRepositoryStub } } = this.World
+  Then(/^I receive a paginateable list of (.*)\s?Messages$/, function (archived) {
+    const { Result, Expects: { MessageRepositoryMock } } = this.World
 
-    expect(MessageRepositoryStub.calledOnce).to.be.equal(true)
-    expect(Result).to.be.deep.equal(this.World.Messages)
+    const expectResult = this.World.Constants.Messages
+
+    expect(MessageRepositoryMock.verify()).to.be.equal(true)
+    expect(Result).to.be.deep.equal(expectResult)
   })
 })

@@ -16,7 +16,8 @@ defineSupportCode(({ Before, After }) => {
         this.World.stubs.push(stub)
         return stub
       },
-      Boundaries: {}
+      Boundaries: {},
+      Constants: {}
     }
   })
 
