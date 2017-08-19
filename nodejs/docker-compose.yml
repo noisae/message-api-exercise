@@ -1,0 +1,18 @@
+version: '2'
+services:
+  messageApi:
+    image: node:8.3.0
+    command: "bash -c 'npm start'"
+    volumes:
+      - ./:/project
+    links:
+      - mongodb
+    ports:
+      - 3000:3000
+    environment:
+      - MESSAGE_API_MONGO_HOST=mongodb
+
+  mongodb:
+    image: mongodb:3.4.7
+    ports:
+      - 27017:27017
