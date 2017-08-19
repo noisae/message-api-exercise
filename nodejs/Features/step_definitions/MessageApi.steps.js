@@ -1,7 +1,7 @@
 const { defineSupportCode } = require('cucumber')
 const { expect } = require('chai')
 
-const MessageFixture = require("Fixtures/Message.fixture")
+const MessageFixture = require("Features/Fixtures/Message.fixture")
 const MessageEntity = require("Domain/Message/Entity/Message")
 const MessageApiService = require("Domain/Message/ApiService")
 const MessageRepository = require("Infra/Repository/Message")()
