@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=development NODE_PATH=./ nodemon Infra/api/server.js",
-    "debug": "NODE_ENV=development NODE_PATH=./ nodemon --inspect Infra/api/server.js",
-    "test": "TZ=utc NODE_ENV=test NODE_PATH=./ mocha \"Domain/**/*.test.js\" \"Infra/**/*.test.js\" --colors --require Tests/support.js --reporter spec",
+    "start": "NODE_ENV=development NODE_PATH=./ nodemon Application/api/server.js",
+    "debug": "NODE_ENV=development NODE_PATH=./ nodemon --inspect Application/api/server.js",
+    "test": "TZ=utc NODE_ENV=test NODE_PATH=./ mocha \"Domain/**/*.test.js\" \"Infra/**/*.test.js\" --colors --reporter spec",
     "test:watch": "yarn test -- --watch --reporter min",
     "integration:app": "TZ=utc NODE_ENV=test NODE_PATH=./ cucumberjs",
     "integration": "yarn integration:app -- Features",

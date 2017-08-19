@@ -18,5 +18,4 @@ MessageFixture.notArchived = new Factory()
   .extend(MessageFixture)
   .attr('isArchived', () => false)
 
-
 module.exports = MessageFixture
