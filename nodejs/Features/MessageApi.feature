@@ -14,9 +14,9 @@ Feature: Message Api
     Then I receive a paginateable list of Archived Messages
 
   Scenario: Show Message
-    Given I have a one Message
-    When I Retrieve a one Message
-    Then I receive Message
+    Given I have a Message
+    When I Retrieve a Message
+    Then I receive a Message
 
   Scenario: Read Message
     Given I have a one Message

@@ -15,6 +15,10 @@ module.exports = (mongodb) => {
         .skip(limit * (page - 1))
         .limit(limit)
         .toArray()
+    },
+    findOne (uid) {
+      return collection
+        .findOne({ uid })
     }
   }
 
