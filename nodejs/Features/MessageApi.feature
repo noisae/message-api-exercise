@@ -19,11 +19,11 @@ Feature: Message Api
     Then I receive a Message
 
   Scenario: Read Message
-    Given I have a one Message
-    When I Read a one Message
-    Then the Message was marked as read
+    Given I have a Message to Read
+    When I Read a Message
+    Then The Message was saved as Read
 
   Scenario: Archive Message
-    Given I have a one Message
-    When I Archive a one Message
-    Then the Message was marked as archived
+    Given I have a Message to Archive
+    When I Archive a Message
+    Then The Message was saved as Archived

@@ -1,5 +1,6 @@
 const dependencies = {
-  MessageRepository: require('Infra/Repository/Message')
+  MessageRepository: require('Infra/Repository/Message'),
+  MessageEntity: require("Domain/Message/Entity/Message")
 }
 
 const AccountsClient = {
@@ -14,6 +15,24 @@ const AccountsClient = {
   show (uid, injection) {
     const { MessageRepository } = Object.assign({}, dependencies, injection)
     return MessageRepository.findOne(uid)
+  },
+  async read (uid, injection) {
+    const { MessageRepository, MessageEntity } = Object.assign({}, dependencies, injection)
+    const message = await MessageRepository.findOne(uid)
+    const messageEntity = new MessageEntity(message)
+
+    messageEntity.read()
+
+    return MessageRepository.save(messageEntity)
+  },
+  async archive (uid, injection) {
+    const { MessageRepository, MessageEntity } = Object.assign({}, dependencies, injection)
+    const message = await MessageRepository.findOne(uid)
+    const messageEntity = new MessageEntity(message)
+
+    messageEntity.archive()
+
+    return MessageRepository.save(messageEntity)
   }
 }
 

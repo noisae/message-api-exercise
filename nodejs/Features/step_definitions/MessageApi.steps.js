@@ -2,6 +2,7 @@ const { defineSupportCode } = require('cucumber')
 const { expect } = require('chai')
 
 const MessageFixture = require("Fixtures/Message.fixture")
+const MessageEntity = require("Domain/Message/Entity/Message")
 const MessageApiService = require("Domain/Message/ApiService")
 const MessageRepository = require("Infra/Repository/Message")()
 
@@ -26,6 +27,7 @@ defineSupportCode(({ Given, When, Then }) => {
     this.World.Expects = { MessageRepositoryMock }
     this.World.Boundaries = { MessageRepository }
   })
+
   When(/^I Retrieve a paginateable list of (.*)\s?Messages$/, async function (archived) {
     const page = this.World.Constants.page
     const limit = this.World.Constants.limit
@@ -35,6 +37,7 @@ defineSupportCode(({ Given, When, Then }) => {
       this.World.Result = await MessageApiService.list({ page, limit }, this.World.Boundaries)
     }
   })
+
   Then(/^I receive a paginateable list of (.*)\s?Messages$/, function (archived) {
     const { Result, Expects: { MessageRepositoryMock } } = this.World
 
@@ -43,8 +46,7 @@ defineSupportCode(({ Given, When, Then }) => {
     expect(MessageRepositoryMock.verify()).to.be.equal(true)
     expect(Result).to.be.deep.equal(expectResult)
   })
-})
-defineSupportCode(({ Given, When, Then }) => {
+
   Given(/^I have a Message$/, function () {
     const MessageRepositoryMock = this.World.mockDependency(MessageRepository)
 
@@ -58,10 +60,53 @@ defineSupportCode(({ Given, When, Then }) => {
     this.World.Expects = { MessageRepositoryMock }
     this.World.Boundaries = { MessageRepository }
   })
+
   When(/^I Retrieve a Message$/, async function () {
     this.World.Result = await MessageApiService.show(this.World.Constants.Message.uid, this.World.Boundaries)
   })
+
   Then(/^I receive a Message$/, function () {
+    const { Result, Expects: { MessageRepositoryMock } } = this.World
+
+    const expectResult = this.World.Constants.Message
+
+    expect(MessageRepositoryMock.verify()).to.be.equal(true)
+    expect(Result).to.be.deep.equal(expectResult)
+  })
+
+  Given(/^I have a Message to (Read|Archive)$/, function (actionType) {
+    const MessageRepositoryMock = this.World.mockDependency(MessageRepository)
+
+    this.World.Constants.Message = MessageFixture.notRead.build()
+    let MessageRepositorySaveArgs = Object.assign({}, this.World.Constants.Message, { isRead: true })
+    if(actionType === 'Archive') {
+      this.World.Constants.Message = MessageFixture.notArchived.build()
+      MessageRepositorySaveArgs = Object.assign({}, this.World.Constants.Message, { isArchived: true })
+    }
+
+    MessageRepositoryMock
+      .expects('findOne')
+      .withArgs(this.World.Constants.Message.uid)
+      .resolves(this.World.Constants.Message)
+
+    MessageRepositoryMock
+      .expects('save')
+      .withArgs(new MessageEntity(MessageRepositorySaveArgs))
+      .resolves(this.World.Constants.Message)
+
+    this.World.Expects = { MessageRepositoryMock }
+    this.World.Boundaries = { MessageRepository }
+  })
+
+  When(/^I Read a Message$/, async function () {
+    this.World.Result = await MessageApiService.read(this.World.Constants.Message.uid, this.World.Boundaries)
+  })
+
+  When(/^I Archive a Message$/, async function () {
+    this.World.Result = await MessageApiService.archive(this.World.Constants.Message.uid, this.World.Boundaries)
+  })
+
+  Then(/^The Message was saved as (Read|Archived)$/, function (actionType) {
     const { Result, Expects: { MessageRepositoryMock } } = this.World
 
     const expectResult = this.World.Constants.Message

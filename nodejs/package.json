@@ -82,6 +82,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mongodb": "^2.2.31"
+    "joi": "^10.6.0",
+    "mongodb": "^2.2.31",
+    "speck-entity": "^0.1.8"
   }
 }

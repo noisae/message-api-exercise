@@ -7,16 +7,16 @@ const MessageFixture = new Factory()
   .attr('subject', () => faker.random.word())
   .attr('message', () => faker.lorem.sentence())
   .attr('time_sent', () => faker.date.recent())
-  .attr('read', () => faker.random.boolean())
-  .attr('achived', () => faker.random.boolean())
+  .attr('isRead', () => faker.random.boolean())
+  .attr('isArchived', () => faker.random.boolean())
 
-MessageFixture.read = new Factory()
+MessageFixture.notRead = new Factory()
   .extend(MessageFixture)
-  .attr('read', () => faker.random.boolean())
+  .attr('isRead', () => false)
 
-MessageFixture.archive = new Factory()
+MessageFixture.notArchived = new Factory()
   .extend(MessageFixture)
-  .attr('achived', () => faker.random.boolean())
+  .attr('isArchived', () => false)
 
 
 module.exports = MessageFixture
