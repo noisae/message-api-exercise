@@ -1,7 +1,9 @@
 version: '2'
 services:
-  messageApi:
-    image: node:8.3.0
+  messageapi:
+    build:
+      context: ./
+      dockerfile: Dockerfile-Node
     command: "bash -c 'npm start'"
     volumes:
       - ./:/project
@@ -13,6 +15,6 @@ services:
       - MESSAGE_API_MONGO_HOST=mongodb
 
   mongodb:
-    image: mongodb:3.4.7
+    image: mongo:3.4.7
     ports:
       - 27017:27017

@@ -1,30 +1,23 @@
 {
   "name": "mailboxapi",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "Application/server.js",
   "scripts": {
-    "start": "NODE_ENV=development NODE_PATH=./ nodemon Application/api/server.js",
-    "debug": "NODE_ENV=development NODE_PATH=./ nodemon --inspect Application/api/server.js",
+    "start": "NODE_ENV=development NODE_PATH=./ nodemon Application/server.js",
+    "debug": "NODE_ENV=development NODE_PATH=./ nodemon --inspect Application/server.js",
     "test": "TZ=utc NODE_ENV=test NODE_PATH=./ mocha \"Domain/**/*.test.js\" \"Infra/**/*.test.js\" --colors --reporter spec",
     "test:watch": "yarn test -- --watch --reporter min",
     "integration:app": "TZ=utc NODE_ENV=test NODE_PATH=./ cucumberjs",
     "integration": "yarn integration:app -- Features",
-    "integration:coverage": "nyc --branches 60 --functions 60 --lines 60 --statements 60 --exclude \"(node_modules|Infra|Fixtures|Features)/**/*\" --exclude \"**/Exception/*.js\" --report-dir integration-coverage --all --exclude \"Domain/**/*.test.js\" --include \"Domain/UseCases/**/*.js\" yarn integration",
+    "integration:coverage": "nyc --branches 60 --functions 60 --lines 60 --statements 60 --exclude \"(node_modules|Infra|Fixtures|Features)/**/*\" --exclude \"**/Exception/*.js\" --report-dir integration-coverage --all --exclude \"Domain/**/*.test.js\" --include \"Domain/**/*.js\" yarn integration",
     "integration:watch": "watch -p \"+(Domain|Infra|seeders|Features)/**/*.js\" -c \"yarn integration\"",
     "coverage": "nyc yarn test",
     "coverage:watch": "watch -p \"+(Domain|Infra|seeders|Features)/**/*.js\" -c \"nyc yarn test\"",
     "lint": "standard -v \"Domain/**/*.js\" \"Infra/**/*.js\" \"seeders/*.js\" \"Features/**/*.js\"",
     "lint:fix": "standard --fix \"Domain/**/*.js\" \"Infra/**/*.js\" \"seeders/*.js\" \"Features/**/*.js\"",
     "lint:watch": "watch -p \"+(Domain|Infra|seeders|Features)/**/*.js\" -c \"yarn lint\"",
-    "migration:create": "sequelize migration:create --name",
-    "db:migrate": "sequelize db:migrate",
-    "db:migrate:undo": "sequelize db:migrate:undo",
-    "db:migrate:undo:all": "sequelize db:migrate:undo:all",
-    "seed:create": "sequelize seed:create --name",
-    "db:seed": "sequelize db:seed",
-    "db:seed:all": "sequelize db:seed:all",
-    "db:seed:undo": "sequelize db:seed:undo",
-    "db:seed:undo:all": "sequelize db:seed:undo:all",
+    "migration:create": "mm create",
+    "db:migrate": "mm",
     "build": "yarn lint && yarn coverage && yarn integration:coverage"
   },
   "engines": {
@@ -82,8 +75,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
     "joi": "^10.6.0",
     "mongodb": "^2.2.31",
+    "mongodb-migrations": "^0.8.5",
     "speck-entity": "^0.1.8"
   }
 }

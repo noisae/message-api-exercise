@@ -1,10 +1,10 @@
 const { defineSupportCode } = require('cucumber')
 const { expect } = require('chai')
 
-const MessageFixture = require("Features/Fixtures/Message.fixture")
-const MessageEntity = require("Domain/Message/Entity/Message")
-const MessageApiService = require("Domain/Message/ApiService")
-const MessageRepository = require("Infra/Repository/Message")()
+const MessageFixture = require('Features/Fixtures/Message.fixture')
+const MessageEntity = require('Domain/Message/Entity/Message')
+const MessageApiService = require('Domain/Message/ApiService')
+const MessageRepository = require('Infra/Repository/Message')()
 
 defineSupportCode(({ Given, When, Then }) => {
   Given(/^I have (.*)\s?Messages$/, function (archived) {
@@ -31,7 +31,7 @@ defineSupportCode(({ Given, When, Then }) => {
   When(/^I Retrieve a paginateable list of (.*)\s?Messages$/, async function (archived) {
     const page = this.World.Constants.page
     const limit = this.World.Constants.limit
-    if(archived) {
+    if (archived) {
       this.World.Result = await MessageApiService.listArchived({ page, limit }, this.World.Boundaries)
     } else {
       this.World.Result = await MessageApiService.list({ page, limit }, this.World.Boundaries)
@@ -79,7 +79,7 @@ defineSupportCode(({ Given, When, Then }) => {
 
     this.World.Constants.Message = MessageFixture.notRead.build()
     let MessageRepositorySaveArgs = Object.assign({}, this.World.Constants.Message, { isRead: true })
-    if(actionType === 'Archive') {
+    if (actionType === 'Archive') {
       this.World.Constants.Message = MessageFixture.notArchived.build()
       MessageRepositorySaveArgs = Object.assign({}, this.World.Constants.Message, { isArchived: true })
     }

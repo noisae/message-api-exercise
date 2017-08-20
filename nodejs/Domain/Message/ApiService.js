@@ -1,14 +1,14 @@
 const dependencies = {
-  MessageRepository: require('Infra/Repository/Message'),
-  MessageEntity: require("Domain/Message/Entity/Message")
+  MessageRepository: require('Infra/Repository/Message')(),
+  MessageEntity: require('Domain/Message/Entity/Message')
 }
 
-const AccountsClient = {
-  list ({ page = 1, limit = 10}, injection) {
+const ApiService = {
+  list ({ page = 1, limit = 10 }, injection) {
     const { MessageRepository } = Object.assign({}, dependencies, injection)
     return MessageRepository.list(page, limit)
   },
-  listArchived ({ page = 1, limit = 10}, injection) {
+  listArchived ({ page = 1, limit = 10 }, injection) {
     const { MessageRepository } = Object.assign({}, dependencies, injection)
     return MessageRepository.listArchived(page, limit)
   },
@@ -36,4 +36,4 @@ const AccountsClient = {
   }
 }
 
-module.exports = AccountsClient
+module.exports = ApiService

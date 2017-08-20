@@ -1,6 +1,7 @@
-module.exports = (mongodb) => {
-  const collection = mongodb && mongodb.collection('messages') || {}
+let collection
 
+module.exports = (mongodb) => {
+  collection = collection || mongodb && mongodb.collection('messages')
   const MessageRepository = {
     list (page, limit) {
       return collection
@@ -11,7 +12,7 @@ module.exports = (mongodb) => {
     },
     listArchived (page, limit) {
       return collection
-        .find({ archived: true })
+        .find({ isArchived: true })
         .skip(limit * (page - 1))
         .limit(limit)
         .toArray()
@@ -22,7 +23,7 @@ module.exports = (mongodb) => {
     },
     save (message) {
       return collection
-        .updateOne({ uid:message.uid }, { $set:message })
+        .updateOne({ uid: message.uid }, { $set: message })
         .then(_ => message)
     }
   }

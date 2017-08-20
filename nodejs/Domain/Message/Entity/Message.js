@@ -3,11 +3,11 @@ const Joi = require('joi')
 const adapter = validatorAdapter('joi', require('joi'))
 
 class Message extends Entity {
-  read() {
+  read () {
     this.isRead = true
   }
 
-  archive() {
+  archive () {
     this.isArchived = true
   }
 }
