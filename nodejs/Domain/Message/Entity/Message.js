@@ -13,7 +13,7 @@ class Message extends Entity {
 }
 
 Message.SCHEMA = {
-  uid: adapter(Joi.string().guid()),
+  uid: adapter(Joi.number()),
   sender: adapter(Joi.string()),
   subject: adapter(Joi.string()),
   message: adapter(Joi.string()),
