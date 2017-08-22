@@ -25,11 +25,11 @@ $ curl -X POST \
   -H 'cache-control: no-cache'
 ```
 ### Endpoints
-**List:** localhost:3000/message/?page=**{pageNumber}**&limit=**{limitNumber}**
-**List Archived:** GET - localhost:3000/message/archived?page=**{pageNumber}**&limit=**{limitNumber}**
-**Show Message:** GET - localhost:3000/message/**{uid}**
-**Read Message:** POST - localhost:3000/message/**{uid}**/read
-**Archive Message:** POST - localhost:3000/message/**{uid}**/archive
+- **List:** localhost:3000/message/?page=**{pageNumber}**&limit=**{limitNumber}**
+- **List Archived:** GET - localhost:3000/message/archived?page=**{pageNumber}**&limit=**{limitNumber}**
+- **Show Message:** GET - localhost:3000/message/**{uid}**
+- **Read Message:** POST - localhost:3000/message/**{uid}**/read
+- **Archive Message:** POST - localhost:3000/message/**{uid}**/archive
 
 ## PHP Project
 ### Run
