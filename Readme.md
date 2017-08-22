@@ -4,14 +4,14 @@
 
 The development of Message Api are based on some concepts, patterns and technics. 
 - First of all the application structure are based on Architeture Layer Idea explained by Robert Martin on "[Ruby Midwest 2011 - Keynote: Architecture the Lost Years by Robert Martin](https://www.youtube.com/watch?v=WpkDN78P884)".
-- All development proccess are made using [TDD](https://martinfowler.com/bliki/TestDrivenDevelopment.html) and [BDD](https://dannorth.net/introducing-bdd/). TDD for some important Business Rules on specific Class, and BDD for importants behaviours of system.
-- BDD is used to develop tests like integration tests, but mocking the repositories.
-- Some important concepts of [DDD](https://www.amazon.com.br/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215) are used here, like Entity and Service. If that api grow up we can move the logic from service to Aggregates, creating that with Factories.
-- The code write are based on best practices from some concepts like Clean Code, Refactor to Patterns, Solid, Object Calisthenics, and others.
-- [Docker](https://www.docker.com/) are used to run the projects.
+- All development proccess are made using [TDD](https://martinfowler.com/bliki/TestDrivenDevelopment.html) and [BDD](https://dannorth.net/introducing-bdd/). TDD for some important Business Rules on specific Classes, and BDD for important system behaviours.
+- BDD is used to develop tests like integration, but mocking the repositories.
+- Some important concepts of [DDD](https://www.amazon.com.br/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215) are used here, like Entity and Service. If that api grow up we can move the logic from Service to Aggregates, creating that with Factories.
+- The code write are based on best practices from some concepts like Clean Code, Refactor to Patterns, SOLID, Object Calisthenics, and others.
+- [Docker](https://docs.docker.com/compose/install/) are used to run the projects.
 
 ## Projects Access
-The project run on **localhost:3000**. To access endpoints of **PHP Project** use a HTTP Authorization header **Authorization: Basic YWRtaW46b2Jlcmxv**, this is a Basic Auth with user **admin** and password **oberlo**.
+The project run on **localhost:3000**. To access endpoints of **PHP Project** use a HTTP Authorization header **Authorization: Basic YWRtaW46b2Jlcmxv**, this is a Basic Auth with user **admin** and password **oberlo**
 ```sh
 $ curl -X GET \
   http://localhost:3000/message \
@@ -33,7 +33,7 @@ $ curl -X POST \
 
 ## PHP Project
 ### Run
-Run mysql first to initial configure, after that you can run **mysql** and **messaapi** docker togheter. Maybe take some time to run first php composer.
+Run mysql on first time, after that you can run **mysql** and **messageapi** dockers together. Maybe will take some time to run first php composer.
 ```sh
 $ docker-compose up mysql
 $ docker-compose up
@@ -51,6 +51,7 @@ $ docker-compose run --rm messageapi./vendor/bin/phinx seed:run -e development
 
 ## NodeJs Project
 ### Run
+Maybe will take some time to run first npm install.
 ```sh
 $ docker-compose up
 ```
