@@ -6,11 +6,15 @@ class SeedMessages extends AbstractSeed
 {
     public function run()
     {
-        $data = json_decode(file_get_contents(__DIR__ . '/messages_sample.json'), true);
+        try {
+            $data = json_decode(file_get_contents(__DIR__ . '/messages_sample.json'), true);
 
-        $messages = $this->table('messages');
-        $messages
-            ->insert($data['messages'])
-            ->save();
+            $messages = $this->table('messages');
+            $messages
+                ->insert($data['messages'])
+                ->save();
+        } catch(Exception $e) {
+            echo 'Exception on seed: ',  $e->getMessage(), "\n";
+        }
     }
 }
