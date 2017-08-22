@@ -1,5 +1,6 @@
 # dependencies
 node_modules
+v8*
 
 #coverage
 coverage

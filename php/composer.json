@@ -1,0 +1,19 @@
+{
+    "require": {
+        "silex/silex": "~2.0",
+        "catfan/Medoo": "~1.4.5",
+        "robmorgan/phinx": "~0.8.1",
+        "vlucas/phpdotenv": "~2.2",
+        "symfony/security": "^3.3"
+    },
+    "require-dev": {
+        "league/factory-muffin": "^3.0",
+        "league/factory-muffin-faker": "^2.0",
+        "phpunit/phpunit": "~5.0",
+        "mockery/mockery": "~0.9",
+        "behat/behat": "^3.3"
+    },
+    "autoload": {
+        "psr-4": { "MessageApi\\": "./" }
+    }
+}

@@ -4,7 +4,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile-Node
-    command: "bash -c 'npm start'"
+    command: "bash -c 'npm run db:migrate && npm start'"
     volumes:
       - ./:/project
     links:

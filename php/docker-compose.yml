@@ -1,0 +1,24 @@
+version: '2'
+services:
+  messageapi:
+    build: ./
+    command: "bash -c 'cd /var/www/html/ && ./composer.phar selfupdate && php composer.phar install && ./vendor/bin/phinx migrate -e development && ./vendor/bin/phinx seed:run -e development && a2enmod rewrite && apache2ctl -D FOREGROUND'"
+    volumes:
+      - ./:/var/www/html/
+    links:
+      - mysql
+    ports:
+      - 3000:80
+    environment:
+      - MESSAGE_API_MYSQL_HOST=mysql
+      - MESSAGE_API_MYSQL_USER=root
+      - MESSAGE_API_MYSQL_PASSWORD=root
+      - MESSAGE_API_MYSQL_DB=messageApi
+
+  mysql:
+    image: mysql:8.0.2
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=messageApi
+    ports:
+      - 3306:3306
