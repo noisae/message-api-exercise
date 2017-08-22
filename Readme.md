@@ -4,7 +4,7 @@
 
 The development of Message Api are based on some concepts, patterns and technics. 
 - First of all the application structure are based on Architeture Layer Idea explained by Robert Martin on "[Ruby Midwest 2011 - Keynote: Architecture the Lost Years by Robert Martin](https://www.youtube.com/watch?v=WpkDN78P884)".
-- All development proccess are made using [TDD](https://martinfowler.com/bliki/TestDrivenDevelopment.html) and [BDD](https://dannorth.net/introducing-bdd/). TDD for some important Business Rules on specific Classes, and BDD for important system behaviours.
+- All development proccess are made using [TDD](https://martinfowler.com/bliki/TestDrivenDevelopment.html) and [BDD](https://dannorth.net/introducing-bdd/). TDD for some important Business Rules on specific Classes, and BDD for important system behaviours. For now the only Unitary Test is Message Entity Test, but i think if that api grow up, we will need to test more the bases of Repository, and Application.
 - BDD is used to develop tests like integration, but mocking the repositories.
 - Some important concepts of [DDD](https://www.amazon.com.br/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215) are used here, like Entity and Service. If that api grow up we can move the logic from Service to Aggregates, creating that with Factories.
 - The code write are based on best practices from some concepts like Clean Code, Refactor to Patterns, SOLID, Object Calisthenics, and others.
