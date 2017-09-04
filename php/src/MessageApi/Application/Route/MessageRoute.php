@@ -3,7 +3,7 @@ namespace MessageApi\Application\Route;
 
 use Symfony\Component\HttpFoundation\Request;
 use Silex\Application;
-use MessageApi\Domain\ExposeApiService;
+use MessageApi\Domain\MessageApi;
 use MessageApi\Application\Route\RouteInterface;
 
 class MessageRoute implements RouteInterface {
@@ -13,16 +13,16 @@ class MessageRoute implements RouteInterface {
      */
     private $app;
     /**
-     * @var ExposeApiService
+     * @var MessageApi
      */
     private $exposeApiService;
 
 
     /**
      * @param Application $app
-     * @param ExposeApiService $exposeApiService
+     * @param MessageApi $exposeApiService
      */
-    public function __construct(Application $app, ExposeApiService $exposeApiService) {
+    public function __construct(Application $app, MessageApi $exposeApiService) {
         $this->app = $app;
         $this->exposeApiService = $exposeApiService;
     }
