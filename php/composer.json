@@ -7,13 +7,20 @@
         "symfony/security": "^3.3"
     },
     "require-dev": {
-        "league/factory-muffin": "^3.0",
-        "league/factory-muffin-faker": "^2.0",
+        "fzaninotto/faker": "^1.7",
         "phpunit/phpunit": "~5.0",
         "mockery/mockery": "~0.9",
         "behat/behat": "^3.3"
     },
     "autoload": {
-        "psr-4": { "MessageApi\\": "./" }
+        "psr-4": {
+            "MessageApi\\": "./src/MessageApi"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MessageApi\\Tests\\": "./tests",
+            "MessageApi\\Features\\": "./features"
+        }
     }
 }

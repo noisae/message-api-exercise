@@ -1,6 +1,6 @@
 paths:
-    migrations: Infra/Migrations
-    seeds: Infra/Migrations/Seeds
+    migrations: migrations
+    seeds: migrations/seeds
 environments:
     default_migration_table: phinxlog
     default_database: messageApi

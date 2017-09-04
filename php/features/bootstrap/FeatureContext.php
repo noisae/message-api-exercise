@@ -3,18 +3,17 @@
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
-use League\FactoryMuffin\FactoryMuffin;
-use MessageApi\Features\Store\Mock as StoreMock;
-use MessageApi\Domain\Message\ApiService;
-use MessageApi\Domain\Message\Entity\Message as Message;
-use MessageApi\Infra\Repository\Message as MessageRepository;
+use MessageApi\Domain\ExposeApiService;
+use MessageApi\Domain\Message\Entity\MessageEntity;
+use MessageApi\Domain\Message\Entity\MessageEntityCollection;
+use MessageApi\Infra\Repository\MessageRepository;
 
 /**
  * Defines application features from the specific context.
  */
 class FeatureContext implements Context
 {
-    protected static $factoryMuffin;
+    private $faker;
     private $page;
     private $limit;
     private $result;
@@ -26,11 +25,44 @@ class FeatureContext implements Context
     /**
      * @BeforeScenario
      */
-    public static function BeforeScenario() {
-        static::$factoryMuffin = new FactoryMuffin(new StoreMock());
-        static::$factoryMuffin->loadFactories(__DIR__.'/../Fixtures');
+    public function BeforeScenario() {
+        $this->faker = \Faker\Factory::create();
 
         Mockery::close();
+    }
+
+    private function createMessageData() {
+        return [
+            'uid' => $this->faker->randomDigitNotNull,
+            'sender'    => $this->faker->word,
+            'subject'   => $this->faker->word,
+            'message' => $this->faker->sentence,
+            'time_sent' => $this->faker->unixTime,
+            'isRead' => false,
+            'isArchived' => false
+        ];
+    }
+
+    private function createMessageEntity() {
+        $messageData = $this->createMessageData();
+        return new MessageEntity(
+            $messageData['uid'],
+            $messageData['sender'],
+            $messageData['subject'],
+            $messageData['message'],
+            $messageData['time_sent'],
+            $messageData['isRead'],
+            $messageData['isArchived']
+        );
+    }
+
+    private function createMessageEntityCollection($count) {
+        $messageEntityCollection = new MessageEntityCollection();
+        for ($i = 0; $i < $count; $i++) {
+            $messageEntityCollection->set($this->createMessageEntity());
+        }
+
+        return $messageEntityCollection;
     }
 
     /**
@@ -40,10 +72,7 @@ class FeatureContext implements Context
     {
         $this->page = 20;
         $this->limit = 20;
-        $this->Messages = [
-            static::$factoryMuffin->create('MessageApi\Domain\Message\Entity\Message'),
-            static::$factoryMuffin->create('MessageApi\Domain\Message\Entity\Message')
-        ];
+        $this->Messages = $this->createMessageEntityCollection(2);
 
         $method = 'listMessages';
         if ($archived) {
@@ -64,12 +93,12 @@ class FeatureContext implements Context
      */
     public function iRetrieveAPaginateableListOfMessages($archived)
     {
-        $this->ApiService = new ApiService($this->MessageRepositoryMock);
+        $this->ExposeApiService = new ExposeApiService($this->MessageRepositoryMock);
         if ($archived) {
-            $this->result = $this->ApiService->listArchived($this->page, $this->limit);
+            $this->result = $this->ExposeApiService->listArchived($this->page, $this->limit);
             return $this->result;
         }
-        $this->result = $this->ApiService->list($this->page, $this->limit);
+        $this->result = $this->ExposeApiService->list($this->page, $this->limit);
     }
 
     /**
@@ -88,13 +117,13 @@ class FeatureContext implements Context
      */
     public function iHaveAMessage()
     {
-        $this->Message = static::$factoryMuffin->create('MessageApi\Domain\Message\Entity\Message');
+        $this->Message = $this->createMessageEntity();
 
         $this->MessageRepositoryMock = Mockery::mock(MessageRepository::class);
         $this->MessageRepositoryMock
             ->shouldReceive('findOne')
             ->once()
-            ->with($this->Message->uid)
+            ->with($this->Message->getUid())
             ->andReturn($this->Message);
     }
 
@@ -103,8 +132,8 @@ class FeatureContext implements Context
      */
     public function iRetrieveAMessage()
     {
-        $this->ApiService = new ApiService($this->MessageRepositoryMock);
-        $this->result = $this->ApiService->show($this->Message->uid);
+        $this->ExposeApiService = new ExposeApiService($this->MessageRepositoryMock);
+        $this->result = $this->ExposeApiService->show($this->Message->getUid());
     }
 
     /**
@@ -123,15 +152,10 @@ class FeatureContext implements Context
      */
     public function iHaveAMessageToReadOrArchive($type)
     {
-        $this->Message = static::$factoryMuffin->create('MessageApi\Domain\Message\Entity\Message');
-        $this->expectedMessage = new Message($this->Message);
+        $this->Message = $this->createMessageEntity();
 
-        $this->expectedMessage->isRead = true;
-        $this->Message->isRead = false;
         $method = 'updateRead';
         if ($type === "Archive") {
-            $this->Message->isArchived = false;
-            $this->expectedMessage->isArchived = true;
             $method = 'updateArchive';
         }
 
@@ -139,13 +163,13 @@ class FeatureContext implements Context
         $this->MessageRepositoryMock
             ->shouldReceive('findOne')
             ->once()
-            ->with($this->Message->uid)
+            ->with($this->Message->getUid())
             ->andReturn($this->Message);
 
         $this->MessageRepositoryMock
             ->shouldReceive($method)
             ->once()
-            ->andReturn($this->expectedMessage);
+            ->andReturn($this->Message);
     }
 
     /**
@@ -153,8 +177,8 @@ class FeatureContext implements Context
      */
     public function iReadAMessage()
     {
-        $this->ApiService = new ApiService($this->MessageRepositoryMock);
-        $this->result = $this->ApiService->read($this->Message->uid);
+        $this->ExposeApiService = new ExposeApiService($this->MessageRepositoryMock);
+        $this->result = $this->ExposeApiService->read($this->Message->getUid());
     }
 
     /**
@@ -162,8 +186,8 @@ class FeatureContext implements Context
      */
     public function iArchiveAMessage()
     {
-        $this->ApiService = new ApiService($this->MessageRepositoryMock);
-        $this->result = $this->ApiService->archive($this->Message->uid);
+        $this->ExposeApiService = new ExposeApiService($this->MessageRepositoryMock);
+        $this->result = $this->ExposeApiService->archive($this->Message->getUid());
     }
 
     /**
@@ -172,8 +196,8 @@ class FeatureContext implements Context
     public function theMessageWasSavedAsRead()
     {
         PHPUnit_Framework_Assert::assertSame(
-            $this->result->isRead,
-            $this->expectedMessage->isRead
+            $this->result->isRead(),
+            true
         );
     }
 
@@ -183,8 +207,8 @@ class FeatureContext implements Context
     public function theMessageWasSavedAsArchived()
     {
         PHPUnit_Framework_Assert::assertSame(
-            $this->result->isArchived,
-            $this->expectedMessage->isArchived
+            $this->result->isArchived(),
+            true
         );
     }
 }
