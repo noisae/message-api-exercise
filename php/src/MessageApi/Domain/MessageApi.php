@@ -7,7 +7,7 @@ use MessageApi\Domain\Message\Entity\AbstractEntity;
 use MessageApi\Domain\Message\Entity\MessageEntity;
 use MessageApi\Domain\Message\Entity\MessageEntityCollection;
 
-class ExposeApiService {
+class MessageApi {
 
     /**
      * @var MessageRepositoryInterface

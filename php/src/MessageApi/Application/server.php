@@ -4,7 +4,7 @@ use Silex\Application;
 use Medoo\Medoo;
 use MessageApi\Infra\Repository\MessageRepository;
 use MessageApi\Infra\Repository\Parser\MessageEntityParser;
-use MessageApi\Domain\ExposeApiService;
+use MessageApi\Domain\MessageApi;
 use MessageApi\Application\Route\MessageRoute;
 
 $app = new Application();
@@ -21,10 +21,10 @@ $messageEntityParser = new MessageEntityParser();
 $messageRepository = new MessageRepository($database, $messageEntityParser);
 
 // Domain
-$apiService = new ExposeApiService($messageRepository);
+$messageApi = new MessageApi($messageRepository);
 
 // Application
-$messageRoute = new MessageRoute($app, $apiService);
+$messageRoute = new MessageRoute($app, $messageApi);
 $messageRoute->register();
 
 // Athentication

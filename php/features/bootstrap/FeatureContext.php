@@ -3,7 +3,7 @@
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
-use MessageApi\Domain\ExposeApiService;
+use MessageApi\Domain\MessageApi;
 use MessageApi\Domain\Message\Entity\MessageEntity;
 use MessageApi\Domain\Message\Entity\MessageEntityCollection;
 use MessageApi\Infra\Repository\MessageRepository;
@@ -93,12 +93,12 @@ class FeatureContext implements Context
      */
     public function iRetrieveAPaginateableListOfMessages($archived)
     {
-        $this->ExposeApiService = new ExposeApiService($this->MessageRepositoryMock);
+        $this->messageApi = new MessageApi($this->MessageRepositoryMock);
         if ($archived) {
-            $this->result = $this->ExposeApiService->listArchived($this->page, $this->limit);
+            $this->result = $this->messageApi->listArchived($this->page, $this->limit);
             return $this->result;
         }
-        $this->result = $this->ExposeApiService->list($this->page, $this->limit);
+        $this->result = $this->messageApi->list($this->page, $this->limit);
     }
 
     /**
@@ -132,8 +132,8 @@ class FeatureContext implements Context
      */
     public function iRetrieveAMessage()
     {
-        $this->ExposeApiService = new ExposeApiService($this->MessageRepositoryMock);
-        $this->result = $this->ExposeApiService->show($this->Message->getUid());
+        $this->messageApi = new MessageApi($this->MessageRepositoryMock);
+        $this->result = $this->messageApi->show($this->Message->getUid());
     }
 
     /**
@@ -177,8 +177,8 @@ class FeatureContext implements Context
      */
     public function iReadAMessage()
     {
-        $this->ExposeApiService = new ExposeApiService($this->MessageRepositoryMock);
-        $this->result = $this->ExposeApiService->read($this->Message->getUid());
+        $this->messageApi = new MessageApi($this->MessageRepositoryMock);
+        $this->result = $this->messageApi->read($this->Message->getUid());
     }
 
     /**
@@ -186,8 +186,8 @@ class FeatureContext implements Context
      */
     public function iArchiveAMessage()
     {
-        $this->ExposeApiService = new ExposeApiService($this->MessageRepositoryMock);
-        $this->result = $this->ExposeApiService->archive($this->Message->getUid());
+        $this->messageApi = new MessageApi($this->MessageRepositoryMock);
+        $this->result = $this->messageApi->archive($this->Message->getUid());
     }
 
     /**
